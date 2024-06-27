@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Oval } from "react-loader-spinner";
+import Loader from "@/app/_components/Loader";
 
 const Availability = () => {
   const [daysAvailable, setDaysAvailable] = useState([]);
@@ -59,20 +60,7 @@ const Availability = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Oval
-          visible={true}
-          height="80"
-          width="80"
-          color="#0069ff"
-          secondaryColor="#0069ff"
-          ariaLabel="oval-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-        />
-      </div>
-    );
+    return <Loader />;
   }
 
   return (

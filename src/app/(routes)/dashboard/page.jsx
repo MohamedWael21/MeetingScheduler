@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { db } from "@/config/firebase-config";
 import MeetingType from "./meeting-type/page";
+import Loader from "@/app/_components/Loader";
 const Dashboard = () => {
   const { user } = useKindeBrowserClient();
   const router = useRouter();
@@ -27,7 +28,7 @@ const Dashboard = () => {
   }, [user, router]);
 
   if (loading) {
-    return <h1>Loading....</h1>;
+    return <Loader />;
   }
 
   return <MeetingType />;

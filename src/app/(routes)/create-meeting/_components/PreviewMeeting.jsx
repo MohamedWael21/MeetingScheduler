@@ -77,7 +77,7 @@ const PreviewMeeting = ({ formValue }) => {
                 <Button
                   key={time}
                   variant="outline"
-                  className="text-primary border-primary"
+                  className="text-primary border-primary hover:bg-primary hover:text-white"
                 >
                   {time}
                 </Button>

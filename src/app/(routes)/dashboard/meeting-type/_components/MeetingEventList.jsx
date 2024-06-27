@@ -6,6 +6,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   orderBy,
   query,
@@ -20,9 +21,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Loader from "@/app/_components/Loader";
 
 const MeetingEventList = () => {
   const [eventList, setEventList] = useState([]);
+  const [businessInfo, setBusinessInfo] = useState([]);
   const { user } = useKindeBrowserClient();
 
   useEffect(() => {
@@ -39,8 +42,14 @@ const MeetingEventList = () => {
       });
       setEventList(eventListTemp);
     };
+    const getBusinessInfo = async () => {
+      const docRef = doc(db, "Business", user.email);
+      const docSnap = await getDoc(docRef);
+      setBusinessInfo(docSnap.data());
+    };
     if (user) {
       getEventList();
+      getBusinessInfo();
     }
   }, [user]);
 
@@ -52,9 +61,15 @@ const MeetingEventList = () => {
     toast.success("Event deleted successfully");
   };
 
+  const onCopyClickHandler = (eventId) => {
+    const meetingUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${businessInfo.businessName}/${eventId}`;
+    navigator.clipboard.writeText(meetingUrl);
+    toast.info("Copied To clipboard");
+  };
+
   return (
     <div className="grid grid-cols-1 gap-10 mt-10 md:grid-cols-2 lg:grid-cols-3">
-      {eventList.length <= 0 && <h2>Loading...</h2>}
+      {eventList.length <= 0 && <Loader />}
       {eventList.map((event) => (
         <div
           key={event.id}
@@ -95,8 +110,7 @@ const MeetingEventList = () => {
               <h2
                 className="flex gap-2 text-sm cursor-pointer text-primary"
                 onClick={() => {
-                  navigator.clipboard.writeText(event.locationURL);
-                  toast.info("Copied To clipboard");
+                  onCopyClickHandler(event.id);
                 }}
               >
                 <Copy className="w-4 h-4" /> Copy Link
